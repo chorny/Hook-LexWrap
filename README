@@ -1,5 +1,5 @@
 ==============================================================================
-                   Release of version 0.01 of Hook::LexWrap
+                   Release of version 0.10 of Hook::LexWrap
 ==============================================================================
 
 
@@ -28,9 +28,25 @@ COPYRIGHT
 
 ==============================================================================
 
-CHANGES IN VERSION 0.01
+CHANGES IN VERSION 0.10
 
-(No changes have been documented for this version)
+
+	- Doc tweak (domo Tatsuhiko-san!)
+
+	- Fixed bug with self-destructing destructor destructing too late
+	  (thanks Garrett)
+
+	- Rebuilt entire implementation with features missing for previous
+	  release, all based on a cunning idea by Michael Schwern
+	  (thanks Michael)
+
+	- Added return value access in pre- and post-wrappers
+
+	- Added pre-emption of original if pre-wrapper changes
+	  return value
+
+	- Added two demos
+
 
 ==============================================================================
 

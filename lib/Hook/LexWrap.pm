@@ -1,7 +1,14 @@
 package Hook::LexWrap;
-our $VERSION = '0.01';
+our $VERSION = '0.10';
 use 5.006;
 use Carp;
+
+*CORE::GLOBAL::caller = sub {
+	my ($height) = ($_[0]||0)+1;
+	my @caller = CORE::caller($height);
+	$caller[3] = (CORE::caller(0))[5];
+	return wantarray ? @_ ? @caller : @caller[0..2] : $caller[0];
+} unless *CORE::GLOBAL::caller{CODE};
 
 sub import { *{caller()."::wrap"} = \&wrap }
 
@@ -16,25 +23,53 @@ sub wrap (*@) {
 	croak "'$_' value is not a subroutine reference"
 		foreach grep {$wrapper{$_} && ref $wrapper{$_} ne 'CODE'}
 			qw(pre post);
-	my ($dtor, $unwrap, $args, $imposter);
 	no warnings 'redefine';
-	$imposter = sub { goto &$original unless *$dtor{CODE};
-			     &{$wrapper{pre}} if $wrapper{pre}; $args = \@_;
-			     goto &{bless sub { goto &$original }, "$imposter"}
-			   };
-	$dtor = $imposter."::DESTROY";
-	*$dtor = sub { $wrapper{post}->(@$args) if $wrapper{post};
-		       undef *$dtor if $unwrap
-		     };
+	my ($caller, $unwrap) = *CORE::GLOBAL::caller{CODE};
+	$imposter = sub {
+		if ($unwrap) { goto &$original }
+		local *CORE::GLOBAL::caller =  sub {
+			my ($height) = ($_[0]||0)+2;
+			my @caller = $caller ? $caller->($height) : CORE::caller($height);
+			$caller[3] = (CORE::caller(0))[5];
+			return wantarray ? @_ ? @caller : @caller[0..2] : $caller[0];
+		};
+		my ($return, $prereturn);
+		if (wantarray) {
+			$prereturn = $return = [];
+			() = $wrapper{pre}->(@_,$return) if $wrapper{pre};
+			if (ref $return eq 'ARRAY' && $return == $prereturn && !@$return) {
+				$return = [ &$original ];
+				() = $wrapper{post}->(@_, $return)
+					if $wrapper{post};
+			}
+			return ref $return eq 'ARRAY' ? @$return : ($return);
+		}
+		else {
+			$return = bless sub {$prereturn=1}, 'Hook::LexWrap::Cleanup';
+			scalar $wrapper{pre}->(@_, $return) if $wrapper{pre};
+			unless ($prereturn) {
+				$return = scalar &$original;
+				scalar $wrapper{post}->(@_, $return)
+					if $wrapper{post};
+			}
+			return $return;
+		}
+	};
 	ref $typeglob eq 'CODE' and return defined wantarray
 		? $imposter
 		: carp "Uselessly wrapped subroutine reference in void context";
 	*{$typeglob} = $imposter;
 	return unless defined wantarray;
-	return bless sub{ $unwrap=1 }, 'Hook::LexWrap::Unwrap';
+	return bless sub{ $unwrap=1 }, 'Hook::LexWrap::Cleanup';
 }
 
-sub Hook::LexWrap::Unwrap::DESTROY { $_[0]->() }
+package Hook::LexWrap::Cleanup;
+
+sub DESTROY { $_[0]->() }
+use overload 
+	q{""}   => sub { undef },
+	q{0+}   => sub { undef },
+	q{bool} => sub { undef };
 
 1;
 
@@ -47,8 +82,8 @@ Hook::LexWrap - Lexically scoped subroutine wrappers
 
 =head1 VERSION
 
-This document describes version 0.01 of Hook::LexWrap,
-released September 17, 2001.
+This document describes version 0.10 of Hook::LexWrap,
+released September 20, 2001.
 
 =head1 SYNOPSIS
 
@@ -70,7 +105,7 @@ released September 17, 2001.
 	}
 
 	@args = (4,5,6);
-	doit(@args);		# pre2->doit->post2
+	doit(@args);		# pre1->doit->post1
 
 
 =head1 DESCRIPTION
@@ -118,8 +153,48 @@ or:
 Once they are installed, the pre- and post-wrappers will be called before
 and after the subroutine itself, and will be passed the same argument list.
 
-The original subroutine is called using the I<magic C<goto>>, so C<wantarray>
-and C<caller> behave exactly as they would, if it had not been wrapped.
+The pre- and post-wrappers and the original subroutine also all see the same
+(correct!) values from C<caller> and C<wantarray>.
+
+
+=head2 Short-circuiting and long-circuiting return values
+
+The pre- and post-wrappers both receive an extra argument in their @_
+arrays. That extra argument is appended to the original argument list
+(i.e. is can always be accessed as $_[-1]) and acts as a place-holder for
+the original subroutine's return value.
+
+In a pre-wrapper, $_[-1] is -- for obvious reasons -- C<undef>. However,
+$_[-1] may be assigned to in a pre-wrapper, in which case Hook::LexWrap
+assumes that the original subroutine has been "pre-empted", and that
+neither it, nor the corresponding post-wrapper, nor any wrappers that
+were applied I<before> the pre-empting pre-wrapper was installed, need
+be run. Note that any post-wrappers that were installed after the
+pre-empting pre-wrapper was installed I<will> still be called before the
+original subroutine call returns.
+
+In a post-wrapper, $_[-1] contains the return value produced by the
+wrapped subroutine. In a scalar return context, this value is the scalar
+return value. In an list return context, this value is a reference to
+the array of return values. $_[-1] may be assigned to in a post-wrapper,
+and this changes the return value accordingly.
+
+Access to the arguments and return value is useful for implementing
+techniques such as memoization:
+
+        my %cache;
+        wrap fibonacci,
+                pre  => sub { $_[-1] = $cache{$_[0]} if $cache{$_[0]} },
+                post => sub { $cache{$_[0]} = $_[-1] };
+
+
+or for converting arguments and return values in a consistent manner:
+
+	# set_temp expects and returns degrees Fahrenheit,
+	# but we want to use Celsius
+        wrap set_temp,
+                pre   => sub { splice @_, 0, 1, $_[0] * 1.8 + 32 },
+                post  => sub { $_[-1] = ($_[0] - 32) / 1.8 };
 
 
 =head2 Lexically scoped wrappers
@@ -178,23 +253,6 @@ For example:
         # Show effects...
         original();             #   now prints "fa..ray..mi"
         $anon_wrapped->();      # still prints "do...ray"
-
-
-=head1 LIMITATIONS
-
-=over
-
-=item *
-
-In the current version, the post-wrapper is I<not> passed the subroutine's
-return value.
-
-=item *
-
-Although the original subroutine sees C<wantarray> and C<caller> as normal,
-the pre- and post-wrappers do not.
-
-=back
 
 
 =head1 DIAGNOSTICS

@@ -3,3 +3,22 @@ Revision history for Perl extension Hook::LexWrap.
 0.01  Mon Sep 17 21:23:33 EST 2001
 	- original version; created by h2xs 1.18
 
+
+
+0.10	Thu Sep 20 11:22:11 2001
+
+	- Doc tweak (domo Tatsuhiko-san!)
+
+	- Fixed bug with self-destructing destructor destructing too late
+	  (thanks Garrett)
+
+	- Rebuilt entire implementation with features missing for previous
+	  release, all based on a cunning idea by Michael Schwern
+	  (thanks Michael)
+
+	- Added return value access in pre- and post-wrappers
+
+	- Added pre-emption of original if pre-wrapper changes
+	  return value
+
+	- Added two demos

@@ -4,3 +4,5 @@ Makefile.PL
 README
 lib/Hook/LexWrap.pm
 test.pl
+demo/demo_memo.pl
+demo/demo_temp.pl
