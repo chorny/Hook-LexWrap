@@ -1,5 +1,5 @@
 use Hook::LexWrap;
-print "1..33\n";
+print "1..54\n";
 
 sub ok   { print "ok $_[0]\n" }
 sub fail(&) { print "not " if $_[0]->() }
@@ -57,21 +57,21 @@ temp(14);
 use Carp;
 
 sub wrapped_callee {
-	return join '|', caller(0);
+	return join '|', caller;
 }
 
 wrap wrapped_callee,
 	pre =>sub{
-		print "not " unless $_[0] eq join '|', caller(0);
+		print "not " unless $_[0] eq join '|', caller;
 		ok 17
 	},
 	post=>sub{
-		print "not " unless $_[0] eq join '|', caller(0);
+		print "not " unless $_[0] eq join '|', caller;
 		ok 18
 	};
 
 sub raw_callee {
-	return join '|', caller(0);
+	return join '|', caller;
 }
 
 print "not " unless wrapped_callee(scalar raw_callee); ok 19;
@@ -133,3 +133,65 @@ wrap howmany,
 	post => sub { ok 33 if @_ == 4 };
 
 howmany(1..3);
+
+sub wanted { 
+	my $expected = $_[3];
+	print 'not ' unless defined wantarray == defined $expected
+			 && wantarray eq $expected;
+	ok $_[1]
+}
+
+wrap wanted,
+	pre => sub {
+		my $expected = $_[3];
+		print 'not ' unless defined wantarray == defined $expected
+				 && wantarray eq $expected;
+		ok $_[0]
+	},
+	post => sub {
+		my $expected = $_[3];
+		print 'not ' unless defined wantarray == defined $expected
+				 && wantarray eq $expected;
+		ok $_[2]
+	};
+
+my @array  = wanted(34..36, 1);
+my $scalar = wanted(37..39, "");
+wanted(40..42,undef);
+
+sub caller_test {
+	print "not " unless (caller 0)[3] eq 'main::caller_test';  ok $_[0];
+	print "not " unless (caller 1)[3] eq 'main::caller_outer'; ok $_[0]+1;
+	print "not " unless (caller 2)[3] eq 'main::wrapped';      ok $_[0]+2;
+	print "not " unless (caller 3)[3] eq 'main::inner';        ok $_[0]+3;
+	print "not " unless (caller 4)[3] eq 'main::middle';       ok $_[0]+4;
+	print "not " unless (caller 5)[3] eq 'main::outer';        ok $_[0]+5;
+}
+
+sub caller_outer {
+	caller_test(@_);
+}
+
+sub wrapped {
+	caller_outer(@_);
+}
+
+sub outer  { middle(@_) }
+sub middle { inner(@_) }
+sub inner  { wrapped(@_) }
+
+outer(43..48);
+
+wrap wrapped,
+	pre => sub {},
+	post => sub {};
+
+wrap wrapped,
+	pre => sub {},
+	post => sub {};
+
+wrap wrapped,
+	pre => sub {},
+	post => sub {};
+
+outer(49..54);

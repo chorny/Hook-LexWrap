@@ -1,14 +1,20 @@
 package Hook::LexWrap;
-our $VERSION = '0.10';
+our $VERSION = '0.20';
 use 5.006;
 use Carp;
 
 *CORE::GLOBAL::caller = sub {
-	my ($height) = ($_[0]||0)+1;
-	my @caller = CORE::caller($height);
-	$caller[3] = (CORE::caller(0))[5];
-	return wantarray ? @_ ? @caller : @caller[0..2] : $caller[0];
-} unless *CORE::GLOBAL::caller{CODE};
+	my ($height) = ($_[0]||0);
+	my $i=1;
+	my $name_cache;
+	while (1) {
+		my @caller = CORE::caller($i++) or return;
+		$caller[3] = $name_cache if $name_cache;
+		$name_cache = $caller[0] eq 'Hook::LexWrap' ? $caller[3] : '';
+		next if $name_cache || $height-- != 0;
+		return wantarray ? @_ ? @caller : @caller[0..2] : $caller[0];
+	}
+};
 
 sub import { *{caller()."::wrap"} = \&wrap }
 
@@ -27,12 +33,6 @@ sub wrap (*@) {
 	my ($caller, $unwrap) = *CORE::GLOBAL::caller{CODE};
 	$imposter = sub {
 		if ($unwrap) { goto &$original }
-		local *CORE::GLOBAL::caller =  sub {
-			my ($height) = ($_[0]||0)+2;
-			my @caller = $caller ? $caller->($height) : CORE::caller($height);
-			$caller[3] = (CORE::caller(0))[5];
-			return wantarray ? @_ ? @caller : @caller[0..2] : $caller[0];
-		};
 		my ($return, $prereturn);
 		if (wantarray) {
 			$prereturn = $return = [];
@@ -44,15 +44,25 @@ sub wrap (*@) {
 			}
 			return ref $return eq 'ARRAY' ? @$return : ($return);
 		}
-		else {
+		elsif (defined wantarray) {
 			$return = bless sub {$prereturn=1}, 'Hook::LexWrap::Cleanup';
-			scalar $wrapper{pre}->(@_, $return) if $wrapper{pre};
+			my $dummy = $wrapper{pre}->(@_, $return) if $wrapper{pre};
 			unless ($prereturn) {
-				$return = scalar &$original;
-				scalar $wrapper{post}->(@_, $return)
+				$return = &$original;
+				$dummy = scalar $wrapper{post}->(@_, $return)
 					if $wrapper{post};
 			}
 			return $return;
+		}
+		else {
+			$return = bless sub {$prereturn=1}, 'Hook::LexWrap::Cleanup';
+			$wrapper{pre}->(@_, $return) if $wrapper{pre};
+			unless ($prereturn) {
+				&$original;
+				$wrapper{post}->(@_, $return)
+					if $wrapper{post};
+			}
+			return;
 		}
 	};
 	ref $typeglob eq 'CODE' and return defined wantarray
@@ -82,8 +92,8 @@ Hook::LexWrap - Lexically scoped subroutine wrappers
 
 =head1 VERSION
 
-This document describes version 0.10 of Hook::LexWrap,
-released September 20, 2001.
+This document describes version 0.20 of Hook::LexWrap,
+released October  1, 2001.
 
 =head1 SYNOPSIS
 

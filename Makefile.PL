@@ -2,6 +2,6 @@
 use ExtUtils::MakeMaker;
 WriteMakefile(
 		NAME	=> 'Hook::LexWrap',
-		VERSION => '0.10',
+		VERSION => '0.20',
 
 	     );

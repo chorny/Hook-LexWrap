@@ -1,5 +1,5 @@
 ==============================================================================
-                   Release of version 0.10 of Hook::LexWrap
+                   Release of version 0.20 of Hook::LexWrap
 ==============================================================================
 
 
@@ -28,24 +28,12 @@ COPYRIGHT
 
 ==============================================================================
 
-CHANGES IN VERSION 0.10
+CHANGES IN VERSION 0.20
 
 
-	- Doc tweak (domo Tatsuhiko-san!)
+	- Fixed various problems in handling C<wantarray> (thanks Marcel)
 
-	- Fixed bug with self-destructing destructor destructing too late
-	  (thanks Garrett)
-
-	- Rebuilt entire implementation with features missing for previous
-	  release, all based on a cunning idea by Michael Schwern
-	  (thanks Michael)
-
-	- Added return value access in pre- and post-wrappers
-
-	- Added pre-emption of original if pre-wrapper changes
-	  return value
-
-	- Added two demos
+	- Fixed C<caller> (thanks everyone)
 
 
 ==============================================================================

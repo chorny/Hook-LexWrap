@@ -22,3 +22,10 @@ Revision history for Perl extension Hook::LexWrap.
 	  return value
 
 	- Added two demos
+
+
+0.20	Mon Oct  1 16:51:00 2001
+
+	- Fixed various problems in handling C<wantarray> (thanks Marcel)
+
+	- Fixed C<caller> (thanks everyone)
