@@ -1,0 +1,44 @@
+==============================================================================
+                   Release of version 0.01 of Hook::LexWrap
+==============================================================================
+
+
+NAME
+    Hook::LexWrap - Lexically scoped subroutine wrappers
+
+VERSION
+    This document describes version 0.01 of Hook::LexWrap, released
+    September 17, 2001.
+
+DESCRIPTION
+    Hook::LexWrap allows you to install a pre- or post-wrapper (or both)
+    around an existing subroutine. Unlike other modules that provide this
+    capacity (e.g. Hook::PreAndPost and Hook::WrapSub), Hook::LexWrap
+    implements wrappers in such a way that the standard `caller' function
+    works correctly within the wrapped subroutine.
+
+AUTHOR
+    Damian Conway (damian@conway.org)
+
+COPYRIGHT
+          Copyright (c) 2001, Damian Conway. All Rights Reserved.
+        This module is free software. It may be used, redistributed
+            and/or modified under the same terms as Perl itself.
+
+
+==============================================================================
+
+CHANGES IN VERSION 0.01
+
+(No changes have been documented for this version)
+
+==============================================================================
+
+AVAILABILITY
+
+Hook::LexWrap has been uploaded to the CPAN
+and is also available from:
+
+	http://www.csse.monash.edu.au/~damian/CPAN/Hook-LexWrap.tar.gz
+
+==============================================================================
