@@ -25,7 +25,7 @@ wrap *main::actual, post => sub { ok 6 };
 
 actual my $x = 4;
 
-no warnings 'bareword';
+no warnings qw/bareword reserved/;
 eval { wrap other, pre => sub { print "not ok 7\n" } } or ok 7;
 
 eval { wrap actual, pre => 1 } and print "not ";
@@ -134,6 +134,8 @@ wrap howmany,
 
 howmany(1..3);
 
+{
+no warnings 'uninitialized';
 sub wanted { 
 	my $expected = $_[3];
 	print 'not ' unless defined wantarray == defined $expected
@@ -158,6 +160,7 @@ wrap wanted,
 my @array  = wanted(34..36, 1);
 my $scalar = wanted(37..39, "");
 wanted(40..42,undef);
+}
 
 sub caller_test {
 	print "not " unless (caller 0)[3] eq 'main::caller_test';  ok $_[0];

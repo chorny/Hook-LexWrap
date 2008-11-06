@@ -1,6 +1,6 @@
 package Hook::LexWrap;
-our $VERSION = '0.20';
 use 5.006;
+our $VERSION = '0.21';
 use Carp;
 
 *CORE::GLOBAL::caller = sub {
@@ -31,7 +31,7 @@ sub wrap (*@) {
 			qw(pre post);
 	no warnings 'redefine';
 	my ($caller, $unwrap) = *CORE::GLOBAL::caller{CODE};
-	$imposter = sub {
+	my $imposter = sub {
 		if ($unwrap) { goto &$original }
 		my ($return, $prereturn);
 		if (wantarray) {
@@ -92,8 +92,8 @@ Hook::LexWrap - Lexically scoped subroutine wrappers
 
 =head1 VERSION
 
-This document describes version 0.20 of Hook::LexWrap,
-released October  1, 2001.
+This document describes version 0.21 of Hook::LexWrap,
+released November  6, 2008.
 
 =head1 SYNOPSIS
 
@@ -317,6 +317,10 @@ There are undoubtedly serious bugs lurking somewhere in code this funky :-)
 
 Bug reports and other feedback are most welcome.
 
+
+=head1 SEE ALSO
+
+Sub::Prepend
 
 =head1 COPYRIGHT
 

@@ -3,6 +3,8 @@ MANIFEST
 Makefile.PL
 README
 lib/Hook/LexWrap.pm
-test.pl
+t/test.t
+t/pod.t
 demo/demo_memo.pl
 demo/demo_temp.pl
+META.yml                                 Module meta-data (added by MakeMaker)

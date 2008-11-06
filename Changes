@@ -29,3 +29,15 @@ Revision history for Perl extension Hook::LexWrap.
 	- Fixed various problems in handling C<wantarray> (thanks Marcel)
 
 	- Fixed C<caller> (thanks everyone)
+
+0.21    Nov 6 2008
+
+        - Added 'See also: Sub::Prepend'
+
+        - Makefile.PL rewritten
+
+        - support of 5.6+ only made explicit
+
+        - Moved tests to t/. Silenced warnings.
+
+        - Added pod.t
