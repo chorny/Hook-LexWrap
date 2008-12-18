@@ -7,4 +7,5 @@ t/test.t
 t/pod.t
 demo/demo_memo.pl
 demo/demo_temp.pl
+is_prerequisite
 META.yml                                 Module meta-data (added by MakeMaker)

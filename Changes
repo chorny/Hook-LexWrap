@@ -30,6 +30,7 @@ Revision history for Perl extension Hook::LexWrap.
 
 	- Fixed C<caller> (thanks everyone)
 
+
 0.21    Nov 6 2008
 
         - Added 'See also: Sub::Prepend'
@@ -41,3 +42,12 @@ Revision history for Perl extension Hook::LexWrap.
         - Moved tests to t/. Silenced warnings.
 
         - Added pod.t
+
+
+0.22    Dec 18 2008
+
+        - use strict; use warnings;
+
+        - Added prototype for caller
+
+        - silenced warnings about sub replacements

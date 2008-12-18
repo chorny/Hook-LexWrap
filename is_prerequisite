@@ -1,0 +1,8 @@
+primary:
+Class::Accessor::Named Acme::ComeFrom DB::Pluggable Sub::MicroSig Sub::WrapPackages Test::SubCalls Test::TestCoverage Test::UniqueTestNames
+
+part of secondary:
+CGI::Application::Plugin::LogDispatch PPI Template::Provider::Preload 
+
+no longer work:
+WWW::Mechanize::Shell OurNet::BBS 

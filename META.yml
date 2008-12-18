@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Hook-LexWrap
-version:            0.21
+version:            0.22
 abstract:           Lexically scoped subroutine wrappers
 author:
     - Damian Conway (damian@conway.org)
