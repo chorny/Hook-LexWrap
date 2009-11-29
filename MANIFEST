@@ -1,6 +1,7 @@
 Changes
 MANIFEST
 Makefile.PL
+Build.PL
 README
 lib/Hook/LexWrap.pm
 t/test.t

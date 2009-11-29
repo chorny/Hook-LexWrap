@@ -51,3 +51,7 @@ Revision history for Perl extension Hook::LexWrap.
         - Added prototype for caller
 
         - silenced warnings about sub replacements
+
+0.23
+
+        - Add Build.PL
