@@ -52,7 +52,7 @@ Revision history for Perl extension Hook::LexWrap.
 
         - silenced warnings about sub replacements
 
-0.23
+0.23    Jul 26 2010
 
         - Add Build.PL
 

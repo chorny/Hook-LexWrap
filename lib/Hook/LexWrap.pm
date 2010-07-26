@@ -2,7 +2,7 @@ package Hook::LexWrap;
 use 5.006;
 use strict;
 use warnings;
-our $VERSION = '0.22_01';
+our $VERSION = '0.23';
 use Carp;
 
 {
