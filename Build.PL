@@ -4,7 +4,7 @@ use Module::Build;
 
 my $build = Module::Build->new(
   'license' => 'perl',
-  'add_to_cleanup' => 'Hook-LexWrap-*',
+  'add_to_cleanup' => ['Hook-LexWrap-*'],
   'build_requires' => {
     'Test::More' => 0
   },
