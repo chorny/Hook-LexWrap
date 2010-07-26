@@ -1,5 +1,5 @@
 ==============================================================================
-                   Release of version 0.20 of Hook::LexWrap
+                   Release of version 0.23 of Hook::LexWrap
 ==============================================================================
 
 
@@ -7,8 +7,7 @@ NAME
     Hook::LexWrap - Lexically scoped subroutine wrappers
 
 VERSION
-    This document describes version 0.01 of Hook::LexWrap, released
-    September 17, 2001.
+    This document describes version 0.23 of Hook::LexWrap.
 
 DESCRIPTION
     Hook::LexWrap allows you to install a pre- or post-wrapper (or both)
@@ -28,21 +27,11 @@ COPYRIGHT
 
 ==============================================================================
 
-CHANGES IN VERSION 0.20
-
-
-	- Fixed various problems in handling C<wantarray> (thanks Marcel)
-
-	- Fixed C<caller> (thanks everyone)
-
-
-==============================================================================
-
 AVAILABILITY
 
 Hook::LexWrap has been uploaded to the CPAN
 and is also available from:
 
-	http://www.csse.monash.edu.au/~damian/CPAN/Hook-LexWrap.tar.gz
+CPAN
 
 ==============================================================================
