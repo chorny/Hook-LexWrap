@@ -15,7 +15,7 @@ my $build = Module::Build->new(
   },
   'meta_merge' => {
     'resources' => {
-      'repository' => 'git://github.com/chorny/Hook-LexWrap.git'
+      'repository' => 'http://github.com/chorny/Hook-LexWrap',
     }
   },
   'dist_version_from' => 'lib/Hook/LexWrap.pm'
