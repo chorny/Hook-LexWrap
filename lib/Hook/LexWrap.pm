@@ -2,7 +2,7 @@ package Hook::LexWrap;
 use 5.006;
 use strict;
 use warnings;
-our $VERSION = '0.22';
+our $VERSION = '0.22_01';
 use Carp;
 
 {
@@ -105,8 +105,7 @@ Hook::LexWrap - Lexically scoped subroutine wrappers
 
 =head1 VERSION
 
-This document describes version 0.21 of Hook::LexWrap,
-released November  6, 2008.
+This document describes version 0.23 of Hook::LexWrap.
 
 =head1 SYNOPSIS
 
