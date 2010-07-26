@@ -91,7 +91,8 @@ sub DESTROY { $_[0]->() }
 use overload 
 	q{""}   => sub { undef },
 	q{0+}   => sub { undef },
-	q{bool} => sub { undef };
+	q{bool} => sub { undef },
+	q{fallback}=>1; #fallback=1 - like no overloading for other operations
 
 1;
 
