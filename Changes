@@ -58,6 +58,6 @@ Revision history for Perl extension Hook::LexWrap.
 
         - better support for debugger
 
-0.24
+0.24    Sep 24 2010
         - Makefile.PL fixed
         - New test added

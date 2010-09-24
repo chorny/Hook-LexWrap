@@ -18,7 +18,7 @@ my $build = Module::Build->new(
       'repository' => 'http://github.com/chorny/Hook-LexWrap',
     }
   },
-  'dist_version_from' => 'lib/Hook/LexWrap.pm'
+  'dist_version_from' => 'lib/Hook/LexWrap.pm',
   'auto_configure_requires' => 0,
 );
 
