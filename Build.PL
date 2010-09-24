@@ -19,6 +19,7 @@ my $build = Module::Build->new(
     }
   },
   'dist_version_from' => 'lib/Hook/LexWrap.pm'
+  'auto_configure_requires' => 0,
 );
 
 $build->create_build_script();
