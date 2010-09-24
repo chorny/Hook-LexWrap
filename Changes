@@ -57,3 +57,7 @@ Revision history for Perl extension Hook::LexWrap.
         - Add Build.PL
 
         - better support for debugger
+
+0.24
+        - Makefile.PL fixed
+        - New test added
