@@ -19,10 +19,10 @@ SCOPED: {
 
  my @args = (1,2,3);
  doit(@args); # pre2->pre1->doit->post1->post2
- is ($str,'[pre2: 1 2 3 ][pre1: 1 2 3 ][doit:{main,example1.t,'.(__LINE__-1).'}][post1:1 2 3 ][post2:1 9 3 ]');
+ is ($str,'[pre2: 1 2 3 ][pre1: 1 2 3 ][doit:{main,'.__FILE__.','.(__LINE__-1).'}][post1:1 2 3 ][post2:1 9 3 ]');
 }
 
 $str='';
 my @args = (4,5,6);
 doit(@args); # pre1->doit->post1
-is ($str,'[pre1: 4 5 6 ][doit:{main,example1.t,'.(__LINE__-1).'}][post1:4 5 6 ]');
+is ($str,'[pre1: 4 5 6 ][doit:{main,'.__FILE__.','.(__LINE__-1).'}][post1:4 5 6 ]');
