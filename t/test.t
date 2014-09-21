@@ -10,11 +10,11 @@ sub actual { ok $_[0]; }
 actual 1;
 
 { 
-	my $lexical = wrap actual,
+	my $lexical = wrap actual =>
 			pre  => sub { ok 2 },
 			post => sub { ok 4 };
 
-	wrap actual, pre => sub { $_[0]++ };
+	wrap actual => pre => sub { $_[0]++ };
 
 	my $x = 2;
 	actual $x;
@@ -26,12 +26,12 @@ wrap *main::actual, post => sub { ok 6 };
 actual my $x = 4;
 
 no warnings qw/bareword reserved/;
-eval { wrap other, pre => sub { print "not ok 7\n" } } or ok 7;
+eval { wrap other => pre => sub { print "not ok 7\n" } } or ok 7;
 
-eval { wrap actual, pre => 1 } and print "not ";
+eval { wrap actual => pre => 1 } and print "not ";
 ok 8;
 
-eval { wrap actual, post => [] } and print "not ";
+eval { wrap actual => post => [] } and print "not ";
 ok 9;
 
 BEGIN { *{CORE::GLOBAL::sqrt} = sub { CORE::sqrt(shift) } }
@@ -60,7 +60,7 @@ sub wrapped_callee {
 	return join '|', caller;
 }
 
-wrap wrapped_callee,
+wrap wrapped_callee =>
 	pre =>sub{
 		print "not " unless $_[0] eq join '|', caller;
 		ok 17
@@ -77,11 +77,11 @@ sub raw_callee {
 print "not " unless wrapped_callee(scalar raw_callee); ok 19;
 
 sub scalar_return { return 'string' }
-wrap scalar_return, post => sub { $_[-1] .= 'ent' };
+wrap scalar_return => post => sub { $_[-1] .= 'ent' };
 print "not " unless scalar_return eq 'stringent'; ok 20;
 
 sub list_return { return (0..9) }
-wrap list_return, post => sub { @{$_[-1]} = reverse @{$_[-1]} };
+wrap list_return => post => sub { @{$_[-1]} = reverse @{$_[-1]} };
 my @result = list_return;
 for (0..9) {
 	print "not " and last unless $_ + $result[$_] == 9;
@@ -89,46 +89,46 @@ for (0..9) {
 ok 21;
 
 sub shorted_scalar { return 2 };
-wrap shorted_scalar, pre => sub { $_[-1] = 1 };
+wrap shorted_scalar => pre => sub { $_[-1] = 1 };
 fail { shorted_scalar != 1 }; ok 22;
 
 sub shorted_list { return (2..9) };
 {
-	my $lexical = wrap shorted_list, pre => sub { $_[-1] = [1..9] };
+	my $lexical = wrap shorted_list => pre => sub { $_[-1] = [1..9] };
 	fail { (shorted_list)[0] != 1 }; ok 23;
 }
 {
-	my $lexical = wrap shorted_list, pre => sub { $_[-1] = 1 };
+	my $lexical = wrap shorted_list => pre => sub { $_[-1] = 1 };
 	fail { (shorted_list)[0] != 1 }; ok 24;
 }
 {
-	my $lexical = wrap shorted_list, pre => sub { @{$_[-1]} = (1..9) };
+	my $lexical = wrap shorted_list=>pre => sub { @{$_[-1]} = (1..9) };
 	fail { (shorted_list)[0] != 1 }; ok 25;
 }
 {
-	my $lexical = wrap shorted_list, pre => sub { @{$_[-1]} = [1..9] };
+	my $lexical = wrap shorted_list=>pre => sub { @{$_[-1]} = [1..9] };
 	fail { (shorted_list)[0]->[0] != 1 }; ok 26;
 }
 {
-	my $lexical = wrap shorted_list, post => sub { $_[-1] = [1..9] };
+	my $lexical = wrap shorted_list=> post => sub { $_[-1] = [1..9] };
 	fail { (shorted_list)[0] != 1 }; ok 27;
 }
 {
-	my $lexical = wrap shorted_list, post => sub { $_[-1] = 1 };
+	my $lexical = wrap shorted_list => post => sub { $_[-1] = 1 };
 	fail { (shorted_list)[0] != 1 }; ok 28;
 }
 {
-	my $lexical = wrap shorted_list, post => sub { @{$_[-1]} = (1..9) };
+	my $lexical = wrap shorted_list=>post => sub { @{$_[-1]} = (1..9) };
 	fail { (shorted_list)[0] != 1 }; ok 29;
 }
 {
-	my $lexical = wrap shorted_list, post => sub { @{$_[-1]} = [1..9] };
+	my $lexical = wrap shorted_list=>post => sub { @{$_[-1]} = [1..9] };
 	fail { (shorted_list)[0]->[0] != 1 }; ok 30;
 }
 
 sub howmany { ok 32 if @_ == 3 }
 
-wrap howmany,
+wrap howmany =>
 	pre  => sub { ok 31 if @_ == 4 },
 	post => sub { ok 33 if @_ == 4 };
 
@@ -143,7 +143,7 @@ sub wanted {
 	ok $_[1]
 }
 
-wrap wanted,
+wrap wanted =>
 	pre => sub {
 		my $expected = $_[3];
 		print 'not ' unless defined wantarray == defined $expected
@@ -185,15 +185,15 @@ sub inner  { wrapped(@_) }
 
 outer(43..48);
 
-wrap wrapped,
+wrap wrapped =>
 	pre => sub {},
 	post => sub {};
 
-wrap wrapped,
+wrap wrapped =>
 	pre => sub {},
 	post => sub {};
 
-wrap wrapped,
+wrap wrapped =>
 	pre => sub {},
 	post => sub {};
 

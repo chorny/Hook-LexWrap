@@ -113,11 +113,11 @@ This document describes version 0.23 of Hook::LexWrap.
 	sub doit { print "[doit:", caller, "]"; return {my=>"data"} }
 
 	SCOPED: {
-		wrap doit,
+		wrap doit =>
 			pre  => sub { print "[pre1: @_]\n" },
 			post => sub { print "[post1:@_]\n"; $_[1]=9; };
 
-		my $temporarily = wrap doit,
+		my $temporarily = wrap doit =>
 			post => sub { print "[post2:@_]\n" },
 			pre  => sub { print "[pre2: @_]\n  "};
 
@@ -204,7 +204,7 @@ Access to the arguments and return value is useful for implementing
 techniques such as memoization:
 
         my %cache;
-        wrap fibonacci,
+        wrap fibonacci =>
                 pre  => sub { $_[-1] = $cache{$_[0]} if $cache{$_[0]} },
                 post => sub { $cache{$_[0]} = $_[-1] };
 
@@ -213,7 +213,7 @@ or for converting arguments and return values in a consistent manner:
 
 	# set_temp expects and returns degrees Fahrenheit,
 	# but we want to use Celsius
-        wrap set_temp,
+        wrap set_temp =>
                 pre   => sub { splice @_, 0, 1, $_[0] * 1.8 + 32 },
                 post  => sub { $_[-1] = ($_[0] - 32) / 1.8 };
 

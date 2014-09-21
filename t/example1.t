@@ -9,11 +9,11 @@ sub doit { $str.= "[doit:{".join(',',caller)."}]"; return {my=>"data"} }
 
 SCOPED: {
  no warnings 'uninitialized'; #last argument in wrapper sub
- wrap doit,
+ wrap doit =>
   pre => sub { $str.="[pre1: @_]" },
   post => sub { $str.="[post1:@_]"; $_[1]=9; };
 
- my $temporarily = wrap doit,
+ my $temporarily = wrap doit =>
   post => sub { $str.="[post2:@_]" },
   pre => sub { $str.="[pre2: @_]"};
 
