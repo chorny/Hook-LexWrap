@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 package Hook::LexWrap;
+# ABSTRACT: Lexically scoped subroutine wrappers
 
 use Carp;
 
@@ -96,15 +97,6 @@ use overload
 1;
 
 __END__
-
-
-=head1 NAME
-
-Hook::LexWrap - Lexically scoped subroutine wrappers
-
-=head1 VERSION
-
-This document describes version 0.23 of Hook::LexWrap.
 
 =head1 SYNOPSIS
 
@@ -312,11 +304,6 @@ subroutine reference.
 
 =back
 
-=head1 AUTHOR
-
-Damian Conway (damian@conway.org)
-
-
 =head1 BLAME
 
 Schwern made me do this (by implying it wasn't possible ;-)
@@ -333,8 +320,4 @@ Bug reports and other feedback are most welcome.
 
 Sub::Prepend
 
-=head1 COPYRIGHT
-
-      Copyright (c) 2001, Damian Conway. All Rights Reserved.
-    This module is free software. It may be used, redistributed
-        and/or modified under the same terms as Perl itself.
+=cut
