@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.25    2014-10-21 02:32:56Z
         - fix for perl 5.21.4: ensure barewords are parsed properly (RT#99021,
           perl RT#122757, Father Chrysostomos)
 
