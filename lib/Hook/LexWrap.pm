@@ -1,8 +1,7 @@
-package Hook::LexWrap;
-use 5.006;
 use strict;
 use warnings;
-our $VERSION = '0.24';
+package Hook::LexWrap;
+
 use Carp;
 
 {

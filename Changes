@@ -1,4 +1,6 @@
-Revision history for Perl extension Hook::LexWrap.
+Revision history for {{$dist->name}}
+
+{{$NEXT}}
 
 0.24    2010-09-24
         - Makefile.PL fixed
