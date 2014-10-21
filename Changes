@@ -1,30 +1,30 @@
 Revision history for Perl extension Hook::LexWrap.
 
-0.24    Sep 24 2010
+0.24    2010-09-24
         - Makefile.PL fixed
         - New test added
 
-0.23    Jul 26 2010
+0.23    2010-07-26
         - Add Build.PL
         - better support for debugger
 
-0.22    Dec 18 2008
+0.22    2008-12-18
         - use strict; use warnings;
         - Added prototype for caller
         - silenced warnings about sub replacements
 
-0.21    Nov 6 2008
+0.21    2008-11-06
         - Added 'See also: Sub::Prepend'
         - Makefile.PL rewritten
         - support of 5.6+ only made explicit
         - Moved tests to t/. Silenced warnings.
         - Added pod.t
 
-0.20	Mon Oct  1 16:51:00 2001
+0.20    2001-10-01 23:51:00Z
 	- Fixed various problems in handling C<wantarray> (thanks Marcel)
 	- Fixed C<caller> (thanks everyone)
 
-0.10	Thu Sep 20 11:22:11 2001
+0.10    2001-09-20 18:22:11Z
 	- Doc tweak (domo Tatsuhiko-san!)
 	- Fixed bug with self-destructing destructor destructing too late
 	  (thanks Garrett)
@@ -36,5 +36,5 @@ Revision history for Perl extension Hook::LexWrap.
 	  return value
 	- Added two demos
 
-0.01  Mon Sep 17 21:23:33 EST 2001
+0.01    2001-09-18 01:23:33Z
 	- original version; created by h2xs 1.18
