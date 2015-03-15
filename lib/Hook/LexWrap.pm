@@ -3,7 +3,7 @@ use warnings;
 package Hook::LexWrap;
 # ABSTRACT: Lexically scoped subroutine wrappers
 
-use Carp;
+use Carp ();
 
 {
 no warnings 'redefine';
@@ -33,9 +33,9 @@ sub wrap (*@) {  ## no critic Prototypes
 	        no strict 'refs';
 	        $original = ref $typeglob eq 'CODE' && $typeglob
 		     || *$typeglob{CODE}
-		     || croak "Can't wrap non-existent subroutine ", $typeglob;
+		     || Carp::croak "Can't wrap non-existent subroutine ", $typeglob;
 	}
-	croak "'$_' value is not a subroutine reference"
+        Carp::croak "'$_' value is not a subroutine reference"
 		foreach grep {$wrapper{$_} && ref $wrapper{$_} ne 'CODE'}
 			qw(pre post);
 	no warnings 'redefine';
@@ -76,7 +76,7 @@ sub wrap (*@) {  ## no critic Prototypes
 	};
 	ref $typeglob eq 'CODE' and return defined wantarray
 		? $imposter
-		: carp "Uselessly wrapped subroutine reference in void context";
+		: Carp::carp "Uselessly wrapped subroutine reference in void context";
 	{
 	        no strict 'refs';
 	        *{$typeglob} = $imposter;
