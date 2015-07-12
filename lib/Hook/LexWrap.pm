@@ -3,6 +3,8 @@ use warnings;
 package Hook::LexWrap;
 # ABSTRACT: Lexically scoped subroutine wrappers
 
+our $VERSION = '0.26';
+
 use Carp ();
 
 {
