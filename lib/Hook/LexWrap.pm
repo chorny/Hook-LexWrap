@@ -6,6 +6,7 @@ package Hook::LexWrap;
 our $VERSION = '0.26';
 
 use Carp ();
+use Sub::Prototype;
 
 {
 no warnings 'redefine';
@@ -76,6 +77,10 @@ sub wrap (*@) {  ## no critic Prototypes
 			return;
 		}
 	};
+	if (ref $typeglob eq 'CODE' || ref $typeglob eq 'GLOB' || !ref $typeglob) {
+		my $proto = prototype($typeglob);
+		set_prototype($imposter, $proto) if defined $proto;
+	}
 	ref $typeglob eq 'CODE' and return defined wantarray
 		? $imposter
 		: Carp::carp "Uselessly wrapped subroutine reference in void context";
